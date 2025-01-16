@@ -1,6 +1,10 @@
 import javax.swing.*;
+import javax.swing.event.ListDataListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+
 import Model.*;
 
 public class View extends JFrame {
@@ -18,21 +22,33 @@ public class View extends JFrame {
     View(Controller controller) {
         this.controller = controller;
 
-
-
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Get the text from the fields
-                String day = dayField.getText();
-                String date = dateField.getText();
-                String birthdayMessage = birthdayMessageField.getText();
-                // System.out.println("view: "+dayField.getText());
-
-                // Pass the values to the controller's addItem method
-                controller.addItem(day, date, birthdayMessage);
+                controller.addItem();
             }
         });
+
+        removeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.deleteItem();
+            }
+        });
+    }
+
+    void setTaskList(ArrayList<Model> models) {
+        DefaultListModel<String> listModel = new DefaultListModel<>();
+
+        for (Model model : models) {
+            listModel.addElement(model.toString());
+        }
+
+        taskList.setModel(listModel);
+    }
+
+    int getSelectedIndex() {
+        return taskList.getSelectedIndex();
     }
 
     void createView() {
@@ -41,6 +57,18 @@ public class View extends JFrame {
         this.setSize(400, 300);
         this.add(panel1);
         //System.exit(0);
+    }
+
+    String getTaskName() {
+        return dayField.getText();
+    }
+
+    String getDeadline() {
+        return dateField.getText();
+    }
+
+    String getBirthdayMessage() {
+        return birthdayMessageField.getText();
     }
 
     public static void main(String[] args) {

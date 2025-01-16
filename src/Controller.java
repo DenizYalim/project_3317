@@ -1,5 +1,4 @@
 import Model.*;
-import Strategy.Strategy;
 import Strategy.*;
 
 import java.time.LocalDate;
@@ -30,29 +29,43 @@ public class Controller {
         strategy = strat;
     }
 
-    public void addItem(String taskName, String deadline, String birthdayMessage) {
+    public void addItem() {
+        setStrategy(new Add());
+        executeStrategy();
+    }
 
+    public void editItem() {
+        setStrategy(new Edit());
+        executeStrategy();
+    }
+
+    public void deleteItem() {
+        int index = 0;
+        setStrategy(new Delete());
+        executeStrategy();
+    }
+
+    void executeStrategy() {
+        int index = view.getSelectedIndex();
+        String taskName = view.getTaskName();
+        String deadline = view.getDeadline();
+        String birthdayMessage = view.getBirthdayMessage();
+        strategy.execute(taskName, deadline, birthdayMessage, index, arrayList);
+        view.setTaskList(arrayList);
         printArraylist();
     }
 
-    public void editItem(String taskName, String deadline, String birthdayMessage, int index){
-        setStrategy(new Edit());
-        strategy.execute(taskName, deadline, birthdayMessage, index);
-    }
-
-    public void deleteItem(String taskName, String deadline, String birthdayMessage, int index) {
-        setStrategy(new Delete());
-        strategy.execute(taskName, deadline, birthdayMessage, index);
-    }
-
-
 
     void printArraylist() {
+        /*
         System.out.println();
         Iterator<Model> iterator = arrayList.iterator();
         while (iterator.hasNext()) {
-            System.out.println(iterator.next().taskName);
+            System.out.println(iterator.next());
         }
+
+        */
+        arrayList.forEach(System.out::println);
     }
 
 

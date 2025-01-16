@@ -21,4 +21,9 @@ public abstract class Model {
     public void setDeadline(Date deadline) {
         this.deadline = deadline;
     }
+
+    @Override
+    public String toString() {
+        return taskName + ", date: " + deadline;
+    }
 }
