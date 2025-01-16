@@ -17,7 +17,6 @@ public class Controller {
     Controller() {
         view = new View(this);
         // databaseConnection = DatabaseConnection.createDatabaseConnection(); //todo uncomment to establish the db
-
         view.createView();
     }
 
@@ -55,7 +54,6 @@ public class Controller {
         printArraylist();
     }
 
-
     void printArraylist() {
         /*
         System.out.println();
@@ -63,11 +61,9 @@ public class Controller {
         while (iterator.hasNext()) {
             System.out.println(iterator.next());
         }
-
         */
         arrayList.forEach(System.out::println);
     }
-
 
     public static void main(String[] args) {
         Controller c = new Controller();

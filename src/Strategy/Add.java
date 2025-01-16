@@ -21,6 +21,5 @@ public class Add implements Strategy{
         db.add(m); // if arraylist
         // addItemToDB(m);
         System.out.println("Item added, " + db.get(db.size()-1));
-
     }
 }

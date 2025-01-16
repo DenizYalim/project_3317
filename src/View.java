@@ -35,6 +35,12 @@ public class View extends JFrame {
                 controller.deleteItem();
             }
         });
+        editButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.editItem();
+            }
+        });
     }
 
     void setTaskList(ArrayList<Model> models) {
