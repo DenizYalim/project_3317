@@ -77,6 +77,20 @@ public class View extends JFrame {
         return birthdayMessageField.getText();
     }
 
+    void setNotificationList(ArrayList<Model> db) {
+        DefaultListModel listModel = new DefaultListModel();
+        for(Model m : db) {
+            listModel.addElement(m);
+        }
+        notificationList.setModel(listModel);
+    }
+
+    public void resetFields() {
+        dayField.setText("");
+        dateField.setText("yyyy-MM-dd");
+        birthdayMessageField.setText("");
+    }
+
     public static void main(String[] args) {
         Controller c = new Controller();
         // View view = new View(c);

@@ -2,10 +2,7 @@ import Model.*;
 import Strategy.*;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
 
 public class Controller {
     View view;
@@ -13,6 +10,7 @@ public class Controller {
     Strategy strategy;
 
     ArrayList<Model> arrayList = new ArrayList<>(); // todo: remove later
+    // ArrayList<Model> notificationDB = new ArrayList<>();
 
     Controller() {
         view = new View(this);
@@ -50,7 +48,10 @@ public class Controller {
         String deadline = view.getDeadline();
         String birthdayMessage = view.getBirthdayMessage();
         strategy.execute(taskName, deadline, birthdayMessage, index, arrayList);
+
+        view.resetFields();
         view.setTaskList(arrayList);
+        view.setNotificationList(getTodaysNotifications());
         printArraylist();
     }
 
@@ -63,6 +64,21 @@ public class Controller {
         }
         */
         arrayList.forEach(System.out::println);
+    }
+
+    ArrayList<Model> getTodaysNotifications() {
+        ArrayList<Model> notifications = new ArrayList<>();
+
+        LocalDate currentDate = LocalDate.now();
+        System.out.println(String.format("currentdate %s",currentDate));
+
+        for(Model m: arrayList) {
+            if (m.deadline.equals(currentDate)) {
+                notifications.add(m);
+            }
+        }
+
+        return notifications;
     }
 
     public static void main(String[] args) {

@@ -1,10 +1,10 @@
 package Model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public abstract class Model {
     public String taskName;
-    public Date deadline;
+    public LocalDate deadline;
 
     public String getTaskName() {
         return taskName;
@@ -14,11 +14,11 @@ public abstract class Model {
         this.taskName = taskName;
     }
 
-    public Date getDeadline() {
+    public LocalDate getDeadline() {
         return deadline;
     }
 
-    public void setDeadline(Date deadline) {
+    public void setDeadline(LocalDate deadline) {
         this.deadline = deadline;
     }
 
