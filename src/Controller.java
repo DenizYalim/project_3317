@@ -3,6 +3,7 @@ import Strategy.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Controller {
     View view;
@@ -14,13 +15,11 @@ public class Controller {
 
     Controller() {
         view = new View(this);
-        // databaseConnection = DatabaseConnection.createDatabaseConnection(); //todo uncomment to establish the db
+        databaseConnection = DatabaseConnection.createDatabaseConnection();
+        // arrayList = databaseConnection.getTables();
         view.createView();
     }
 
-    public void addItemToDB(Model item) {
-        // databaseConnection.addItem(item);
-    }
 
     public void setStrategy(Strategy strat) {
         strategy = strat;
@@ -53,17 +52,19 @@ public class Controller {
         view.setTaskList(arrayList);
         view.setNotificationList(getTodaysNotifications());
         printArraylist();
+
+        databaseConnection.setTables(arrayList); // inserting the arraylist onto mysql
     }
 
     void printArraylist() {
-        /*
+
         System.out.println();
         Iterator<Model> iterator = arrayList.iterator();
         while (iterator.hasNext()) {
             System.out.println(iterator.next());
         }
-        */
-        arrayList.forEach(System.out::println);
+        /*
+        arrayList.forEach(System.out::println); */
     }
 
     ArrayList<Model> getTodaysNotifications() {

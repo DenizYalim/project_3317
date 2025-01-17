@@ -19,7 +19,7 @@ public class Add implements Strategy {
         try {
             LocalDate date = LocalDate.parse(deadline);
             Model m = new BasicMessage(taskName, date);
-            if (birthdayMessage != null && birthdayMessage != " ") { // todo: check
+            if (birthdayMessage != null && !birthdayMessage.equals("")) {
                 m = new BirthdayMessage(m, birthdayMessage);
             }
             db.add(m);

@@ -2,6 +2,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.time.LocalDate;
 
 import Model.*;
 
@@ -26,35 +28,49 @@ public class DatabaseConnection {
     }
 
     private void initializeDatabase() {
-        String databaseName = "todolist_db";
-        String createDB = "CREATE DATABASE IF NOT EXISTS " + databaseName;
-        String useDB = "USE " + databaseName;
+
         String createBasicDaytables = String.format("""
                 CREATE TABLE IF NOT EXISTS %s (
-                    id INT PRIMARY KEY,
+                    id INT AUTO_INCREMENT PRIMARY KEY,
                     name VARCHAR(50),
                     deadline DATE 
                 );
-                
+                                
                 """, BASICDAYSTABLE);
         String createBirthdayTable = String.format("""
                 CREATE TABLE IF NOT EXISTS %s (
-                    id INT PRIMARY KEY,
+                    id INT AUTO_INCREMENT PRIMARY KEY,
                     name VARCHAR(50),
                     deadline DATE,
                     birthdayMessage TEXT
                 );
                 """, BIRTHDAYSTABLE);
+
+        executeStatement(createBasicDaytables);
+        executeStatement(createBirthdayTable);
+        System.out.println("Database setup successfully");
+    }
+
+    public void executeStatement(String q, boolean debug) {
+        if(debug) {
+            System.out.println(q);
+        }
+        executeStatement(q);
+    }
+    public void executeStatement(String q) {
+        String databaseName = "todolist_db";
+        String createDB = "CREATE DATABASE IF NOT EXISTS " + databaseName;
+        String useDB = "USE " + databaseName;
         try (
-                Connection connection = getConnection(); Statement statement = connection.createStatement()) {
+                Connection connection = getConnection();
+                Statement statement = connection.createStatement()) {
             statement.execute(createDB);
             statement.execute(useDB);
-            statement.execute(createBasicDaytables);
-            statement.execute(createBirthdayTable);
-            System.out.println("Database setup successfully");
+            ;
+            statement.execute(q);
         } catch (SQLException e) {
             e.printStackTrace();
-            // todo maybe create a JPANEL displaying the connection error ?
+            // todo maybe create a JPANEL displaying the error ?
         }
     }
 
@@ -62,73 +78,48 @@ public class DatabaseConnection {
         return DriverManager.getConnection(URL, USERNAME, PASSWORD);
     }
 
-    public void addItem(Model item) {
-
-        String table;
-        String columns;
-        String values;
-        if (item instanceof BirthdayMessage) { // Birthday Day
-            table = BIRTHDAYSTABLE;
-            columns = "(name, deadline, birthdayMessage)";
-            values = "(" + item.getTaskName() + "," + item.getDeadline() + "," + ((BirthdayMessage) item).getBirthdayMessage() + ")";
-        } else {    // Basic Day
-            table = BASICDAYSTABLE;
-            columns = "(name, deadline)";
-            values = "(" + item.getTaskName() + "," + item.getDeadline() + ")";
+    public void emptyTable(String table) {
+        if (!table.equals(BASICDAYSTABLE) && !table.equals(BIRTHDAYSTABLE)) {
+            return;
         }
 
-        String query = "INSERT INTO " + table + columns + " VALUES " + values + ";";
-        try ( // todo: connection'ı genele alsak oradan çağırsak olur mu, tekrar initialize etmek yerine
-              Connection connection = getConnection(); Statement statement = connection.createStatement()) {
-            statement.execute(query);
-            System.out.println("Item successfully added: " + item.getTaskName());
-        } catch (SQLException E) {
-            System.out.println("ERROR: ITEM WASN'T ADDED CORRECTLY");
+        String statement = "DELETE FROM " + table;
+        /*
+        if (table.equals(BIRTHDAYSTABLE)) {
+            statement += BIRTHDAYSTABLE;
         }
+        else {
+            statement = String.format("DELETE FROM %s", BASICDAYSTABLE);
+        }
+        */
 
+        executeStatement(statement, false);
+        System.out.println("Deleted table: " + table);
     }
 
-    public void removeItem(Model item) {
-        // todo
-        String table;
-        if (item instanceof BirthdayMessage) {
-            table = BIRTHDAYSTABLE;
-        } else {
-            table = BASICDAYSTABLE;
-        }
-        String condition = "name is " + item.taskName; // maybe make this more discrete?
-        String query = "DELETE FROM" + table + " WHERE " + condition;
+    public void setTables(ArrayList<Model> arrayList) {
+        emptyTable(BASICDAYSTABLE);
+        emptyTable(BIRTHDAYSTABLE);
 
-        try ( // todo: connection'ı genele alsak oradan çağırsak olur mu, tekrar initialize etmek yerine
-              Connection connection = getConnection(); Statement statement = connection.createStatement()) {
-            statement.execute(query);
-            System.out.println("Item removed from " + table + ": " + item.getTaskName());
-        } catch (SQLException E) {
-            System.out.println("ERROR: ITEM WASN'T REMOVED SUCCESSFULLY FROM TABLE: " + table);
+        for (Model m : arrayList) {
+            String statement = "INSERT INTO ";
+
+            String name = m.getTaskName();
+            LocalDate deadline = m.getDeadline();
+
+            if (m instanceof BirthdayMessage) {
+                String bdmessage = ((BirthdayMessage) m).getBirthdayMessage();
+                statement += String.format("%s (name, deadline, birthdayMessage) VALUES ('%s', '%s', '%s')", BIRTHDAYSTABLE, name, deadline, bdmessage);
+            } else {
+                statement += String.format("%s (name, deadline) VALUES ('%s', '%s')", BASICDAYSTABLE, name, deadline);
+            }
+            executeStatement(statement, true);
         }
+        System.out.println("Inserted arraylist onto MySql");
     }
 
-    public void editItem(Model item, Model newItem) {
-        // todo
-        //Make sure that a change can be done such that all 3 columns are changed
-    }
-
-    public int getItemIndex(Model item) {
-        String table;
-        String conditions;
-        if (item instanceof BirthdayMessage) {
-            table = BIRTHDAYSTABLE;
-            conditions = " = " + item.taskName + " = " + item.deadline + " = " + ((BirthdayMessage) item).getBirthdayMessage();
-        } else {
-            table = BASICDAYSTABLE;
-            conditions = " = " + item.taskName + " = " + item.deadline;
-        }
-
-        String query = "SELECT " + table + " WHERE " + conditions; // todo
-        return -1;
-    }
-
-    public void getTables() {
+    public ArrayList<Model> getTables() {
         // todo join both of the tables and return
+        return null;
     }
 }

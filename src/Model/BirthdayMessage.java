@@ -1,7 +1,8 @@
 package Model;
 
-public class BirthdayMessage extends ModelExtended{
+public class BirthdayMessage extends ModelExtended {
     String birthdayMessage;
+
     public BirthdayMessage(Model m, String birthdayMessage) {
         super(m);
         this.birthdayMessage = birthdayMessage;
@@ -13,5 +14,10 @@ public class BirthdayMessage extends ModelExtended{
 
     public void setBirthdayMessage(String birthdayMessage) {
         this.birthdayMessage = birthdayMessage;
+    }
+
+    @Override
+    public String toString() {
+        return "taskName: " + taskName + ", date: " + deadline + ", birthdayMessage: " + birthdayMessage;
     }
 }
