@@ -31,3 +31,4 @@ bin/
 
 ### PASSWORDS ###
 passwordConfigForDB
+src/passwordConfigForDB.java

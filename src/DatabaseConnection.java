@@ -8,9 +8,9 @@ import Model.*;
 public class DatabaseConnection {
     private static DatabaseConnection instance = null;
 
-    private String URL = "jdbc:mysql://localhost:3306";
-    private String USERNAME = "root";
-    private String PASSWORD = "";
+    private String URL = passwordConfigForDB.getURL();
+    private String USERNAME = passwordConfigForDB.getUsername();
+    private String PASSWORD = passwordConfigForDB.getPassword();
     private String BASICDAYSTABLE = "basicdayDays";
     private String BIRTHDAYSTABLE = "birthdayDays";
 
