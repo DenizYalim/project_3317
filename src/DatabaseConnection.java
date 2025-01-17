@@ -8,9 +8,9 @@ import Model.*;
 public class DatabaseConnection {
     private static DatabaseConnection instance = null;
 
-    private String URL = "jdbc:mysql://localhost:3306/deneme";
+    private String URL = "jdbc:mysql://localhost:3306";
     private String USERNAME = "root";
-    private String PASSWORD = "1234";
+    private String PASSWORD = "";
     private String BASICDAYSTABLE = "basicdayDays";
     private String BIRTHDAYSTABLE = "birthdayDays";
 
@@ -29,24 +29,28 @@ public class DatabaseConnection {
         String databaseName = "todolist_db";
         String createDB = "CREATE DATABASE IF NOT EXISTS " + databaseName;
         String useDB = "USE " + databaseName;
-        String createtables = String.format("""
+        String createBasicDaytables = String.format("""
                 CREATE TABLE IF NOT EXISTS %s (
-                    id INT PRIMARY KEY UNIQUE,
+                    id INT PRIMARY KEY,
                     name VARCHAR(50),
-                    deadline DATE
+                    deadline DATE 
                 );
+                
+                """, BASICDAYSTABLE);
+        String createBirthdayTable = String.format("""
                 CREATE TABLE IF NOT EXISTS %s (
-                    id INT PRIMARY KEY UNIQUE,
+                    id INT PRIMARY KEY,
                     name VARCHAR(50),
                     deadline DATE,
                     birthdayMessage TEXT
                 );
-                """, BASICDAYSTABLE, BIRTHDAYSTABLE);
+                """, BIRTHDAYSTABLE);
         try (
                 Connection connection = getConnection(); Statement statement = connection.createStatement()) {
             statement.execute(createDB);
             statement.execute(useDB);
-            statement.execute(createtables);
+            statement.execute(createBasicDaytables);
+            statement.execute(createBirthdayTable);
             System.out.println("Database setup successfully");
         } catch (SQLException e) {
             e.printStackTrace();
@@ -89,8 +93,7 @@ public class DatabaseConnection {
         String table;
         if (item instanceof BirthdayMessage) {
             table = BIRTHDAYSTABLE;
-        }
-        else {
+        } else {
             table = BASICDAYSTABLE;
         }
         String condition = "name is " + item.taskName; // maybe make this more discrete?
@@ -99,9 +102,9 @@ public class DatabaseConnection {
         try ( // todo: connection'ı genele alsak oradan çağırsak olur mu, tekrar initialize etmek yerine
               Connection connection = getConnection(); Statement statement = connection.createStatement()) {
             statement.execute(query);
-            System.out.println("Item removed from "+ table +": " + item.getTaskName());
+            System.out.println("Item removed from " + table + ": " + item.getTaskName());
         } catch (SQLException E) {
-            System.out.println("ERROR: ITEM WASN'T REMOVED SUCCESSFULLY FROM TABLE: "+ table);
+            System.out.println("ERROR: ITEM WASN'T REMOVED SUCCESSFULLY FROM TABLE: " + table);
         }
     }
 
@@ -116,8 +119,7 @@ public class DatabaseConnection {
         if (item instanceof BirthdayMessage) {
             table = BIRTHDAYSTABLE;
             conditions = " = " + item.taskName + " = " + item.deadline + " = " + ((BirthdayMessage) item).getBirthdayMessage();
-        }
-        else {
+        } else {
             table = BASICDAYSTABLE;
             conditions = " = " + item.taskName + " = " + item.deadline;
         }

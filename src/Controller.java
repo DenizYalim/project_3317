@@ -9,7 +9,7 @@ public class Controller {
     DatabaseConnection databaseConnection;
     Strategy strategy;
 
-    ArrayList<Model> arrayList = new ArrayList<>(); // todo: remove later
+    ArrayList<Model> arrayList = new ArrayList<>();
     // ArrayList<Model> notificationDB = new ArrayList<>();
 
     Controller() {
