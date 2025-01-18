@@ -58,6 +58,7 @@ public class View extends JFrame {
     }
 
     void createView() {
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack();
         this.setVisible(true);
         this.setSize(400, 300);
