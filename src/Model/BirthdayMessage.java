@@ -18,6 +18,6 @@ public class BirthdayMessage extends ModelExtended {
 
     @Override
     public String toString() {
-        return "taskName: " + taskName + ", date: " + deadline + ", birthdayMessage: " + birthdayMessage;
+        return "task: " + taskName + " - " + deadline + ", BIRTHDAY: " + birthdayMessage;
     }
 }

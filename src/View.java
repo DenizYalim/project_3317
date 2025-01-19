@@ -2,6 +2,7 @@ import javax.swing.*;
 import javax.swing.event.ListDataListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -92,7 +93,7 @@ public class View extends JFrame {
         birthdayMessageField.setText("");
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         Controller c = new Controller();
         // View view = new View(c);
         // view.createView();

@@ -1,6 +1,7 @@
 import Model.*;
 import Strategy.*;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -10,14 +11,17 @@ public class Controller {
     DatabaseConnection databaseConnection;
     Strategy strategy;
 
-    ArrayList<Model> arrayList = new ArrayList<>();
+    ArrayList<Model> arrayList;
     // ArrayList<Model> notificationDB = new ArrayList<>();
 
-    Controller() {
+    Controller() throws SQLException {
         view = new View(this);
         databaseConnection = DatabaseConnection.createDatabaseConnection();
-        // arrayList = databaseConnection.getTables();
+        arrayList = databaseConnection.getTables();
         view.createView();
+        view.resetFields();
+        view.setTaskList(arrayList);
+        view.setNotificationList(getTodaysNotifications());
     }
 
 
@@ -51,7 +55,7 @@ public class Controller {
         view.resetFields();
         view.setTaskList(arrayList);
         view.setNotificationList(getTodaysNotifications());
-        printArraylist();
+        // printArraylist();
 
         databaseConnection.setTables(arrayList); // inserting the arraylist onto mysql
     }
@@ -64,7 +68,8 @@ public class Controller {
             System.out.println(iterator.next());
         }
         /*
-        arrayList.forEach(System.out::println); */
+        arrayList.forEach(System.out::println);
+        */
     }
 
     ArrayList<Model> getTodaysNotifications() {
@@ -82,7 +87,7 @@ public class Controller {
         return notifications;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         Controller c = new Controller();
     }
 }

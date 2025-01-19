@@ -24,6 +24,6 @@ public abstract class Model {
 
     @Override
     public String toString() {
-        return "taskName: "+ taskName + ", date: " + deadline;
+        return "task: "+ taskName + " - " + deadline;
     }
 }

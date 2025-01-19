@@ -1,6 +1,7 @@
+import java.sql.SQLException;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         Controller controller = new Controller();
         // DatabaseConnection db = DatabaseConnection.createDatabaseConnection();
     }
